@@ -1,0 +1,424 @@
+<!--
+  VERSION : v1 - 05/09/2026
+  Cumule :
+    - v1 : reprise du contenu existant, migration vers dépôt GitHub. Retrait de
+      la catégorie "App Campagne" et du widget "Dernière Opération Campagne"
+      (appli campagne-igbas supprimée le 05/09/2026). Correction du lien "App
+      Publique" (ancien methode-igbas.pages.dev -> compagnon-sante.pages.dev).
+  Fichiers precedents : index.html (dashboard-igbas, version initiale)
+-->
+<meta name="app-version" content="v1-2026-09-05">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IGBas® — Dashboard Central</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Outfit:wght@300;400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#0a1628;
+  --navy2:#0f2035;
+  --navy3:#1A3A5C;
+  --teal:#1e6b5e;
+  --teal2:#2d9e85;
+  --teal3:#4ecb8d;
+  --gold:#c8973a;
+  --gold2:#e0a83c;
+  --vert:#085041;
+  --red:#e05252;
+  --text:#ffffff;
+  --text2:rgba(255,255,255,0.65);
+  --text3:rgba(255,255,255,0.35);
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.15);
+}
+body{background:var(--navy);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;font-size:20px;line-height:1.7;}
+
+/* TOPBAR */
+.topbar{background:var(--navy2);border-bottom:1px solid var(--border2);padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.topbar-logo span{color:var(--teal3);font-style:italic;}
+.topbar-time{font-family:'Share Tech Mono',monospace;font-size:20px;color:var(--teal3);letter-spacing:1px;}
+.topbar-actions{display:flex;gap:8px;}
+.btn-top{background:var(--teal);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:20px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;transition:background 0.2s;}
+.btn-top:hover{background:var(--teal2);}
+.btn-top.gold{background:rgba(200,151,58,0.2);color:var(--gold2);border:1px solid rgba(200,151,58,0.3);}
+.btn-top.gold:hover{background:rgba(200,151,58,0.3);}
+
+/* STATUSBAR */
+.statusbar{background:var(--navy2);border-bottom:2px solid var(--teal);padding:8px 24px;display:flex;gap:24px;overflow-x:auto;}
+.status-item{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:20px;font-family:'Share Tech Mono',monospace;letter-spacing:0.5px;cursor:pointer;text-decoration:none;}
+.status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.dot-green{background:var(--teal3);box-shadow:0 0 6px var(--teal3);}
+.dot-gold{background:var(--gold2);box-shadow:0 0 6px var(--gold2);}
+.dot-red{background:var(--red);box-shadow:0 0 6px var(--red);}
+.status-label{color:var(--text3);}
+.status-val{color:var(--text);font-weight:700;}
+
+/* MAIN */
+.main{padding:20px 24px 60px;max-width:1400px;margin:0 auto;}
+
+/* WIDGET DERNIÈRE OPÉ */
+.widget-ope{background:linear-gradient(135deg,#0d2a1a,#0f2035);border:1px solid rgba(29,158,117,0.3);border-radius:16px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:stretch;gap:0;overflow:hidden;position:relative;}
+.widget-ope::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal2),var(--gold));}
+.widget-ope-left{flex:1;min-width:0;}
+.widget-ope-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(29,158,117,0.2);border:1px solid rgba(29,158,117,0.4);border-radius:20px;padding:4px 12px;font-size:20px;font-weight:700;color:var(--teal3);letter-spacing:1px;margin-bottom:10px;}
+.widget-ope-title{font-size:20px;font-weight:900;margin-bottom:4px;}
+.widget-ope-theme{font-size:20px;color:var(--text2);margin-bottom:14px;}
+.widget-ope-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.widget-meta-item{font-size:20px;color:var(--text3);}
+.widget-meta-item strong{color:var(--text2);font-weight:600;}
+.widget-ope-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;padding-left:24px;border-left:1px solid var(--border);min-width:160px;}
+.statut-badge{border-radius:20px;padding:5px 14px;font-size:20px;font-weight:700;}
+.statut-prep{background:rgba(200,151,58,0.2);color:var(--gold2);border:1px solid rgba(200,151,58,0.4);}
+.statut-publie{background:rgba(78,203,141,0.15);color:var(--teal3);border:1px solid rgba(78,203,141,0.3);}
+.statut-archive{background:rgba(255,255,255,0.08);color:var(--text3);border:1px solid var(--border);}
+.btn-ope{background:var(--teal);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:20px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;text-decoration:none;display:inline-block;transition:background 0.2s;white-space:nowrap;}
+.btn-ope:hover{background:var(--teal2);}
+
+/* GRILLE CATÉGORIES */
+.section-title{font-size:20px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;margin-top:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+
+/* CAT CARD */
+.cat-card{background:var(--navy2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color 0.2s;}
+.cat-card:hover{border-color:var(--border2);}
+.cat-head{padding:14px 18px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.cat-icon{font-size:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:10px;}
+.cat-label{font-size:20px;font-weight:700;}
+.cat-count{margin-left:auto;font-size:20px;color:var(--text3);}
+.cat-body{padding:10px 8px;}
+
+/* LIEN */
+.link-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:var(--text2);font-size:20px;}
+.link-item:hover{background:rgba(255,255,255,0.06);color:var(--text);}
+.link-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0.4;flex-shrink:0;}
+.link-name{flex:1;}
+.link-del{opacity:0;font-size:20px;color:var(--red);cursor:pointer;padding:2px 6px;border-radius:4px;transition:opacity 0.15s;}
+.link-item:hover .link-del{opacity:0.6;}
+.link-del:hover{opacity:1!important;}
+
+/* COULEURS */
+.swatches{display:flex;gap:8px;padding:12px 14px;flex-wrap:wrap;}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;}
+.swatch-color{width:32px;height:32px;border-radius:6px;border:1px solid var(--border2);transition:transform 0.15s;}
+.swatch:hover .swatch-color{transform:scale(1.15);}
+.swatch-hex{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);}
+
+/* CODES */
+.code-bloc{margin:6px 12px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid var(--border);overflow:hidden;}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--border);}
+.code-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);}
+.btn-copy-code{background:none;border:none;color:var(--gold2);font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;}
+.btn-copy-code:hover{color:var(--text);}
+.code-content{padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--teal3);line-height:1.6;word-break:break-all;white-space:pre-wrap;}
+
+/* ADD LINK */
+.add-zone{padding:8px 14px 12px;border-top:1px solid var(--border);}
+.add-row{display:flex;gap:6px;margin-top:6px;}
+.add-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:8px;color:#fff;padding:7px 10px;font-size:20px;font-family:'Outfit',sans-serif;min-width:0;}
+.add-input:focus{outline:none;border-color:var(--teal2);}
+.add-input::placeholder{color:var(--text3);}
+.btn-add-link{background:var(--teal);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:20px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;white-space:nowrap;}
+.btn-add-link:hover{background:var(--teal2);}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--navy2);border:1px solid var(--border2);border-radius:16px;padding:28px;width:440px;max-width:95vw;}
+.modal h3{font-size:20px;font-weight:700;margin-bottom:20px;}
+.modal-field{margin-bottom:14px;}
+.modal-label{font-size:20px;color:var(--text2);font-weight:600;letter-spacing:1px;display:block;margin-bottom:6px;}
+.modal-input,.modal-select{width:100%;background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:8px;color:#fff;padding:10px 12px;font-size:20px;font-family:'Outfit',sans-serif;}
+.modal-input:focus,.modal-select:focus{outline:none;border-color:var(--teal2);}
+.modal-select option{background:var(--navy2);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+.btn-cancel{background:rgba(255,255,255,0.08);color:var(--text2);border:none;border-radius:8px;padding:10px 18px;font-size:20px;font-family:'Outfit',sans-serif;cursor:pointer;}
+.btn-save{background:var(--teal);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:20px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--teal);color:#fff;border-radius:10px;padding:12px 24px;font-size:20px;font-weight:600;opacity:0;transition:all 0.3s;pointer-events:none;z-index:300;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media(max-width:600px){
+  .widget-ope{flex-direction:column;}
+  .widget-ope-right{border-left:none;border-top:1px solid var(--border);padding-left:0;padding-top:16px;flex-direction:row;align-items:center;min-width:0;}
+  .topbar-time{display:none;}
+}
+</style>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">IGBas® <span>Dashboard</span></div>
+  <div class="topbar-time" id="clock">--:--:--</div>
+  <div class="topbar-actions">
+    <button class="btn-top gold" onclick="exportData()">⬇ Export</button>
+    <button class="btn-top" onclick="openModal()">+ Ajouter</button>
+  </div>
+</div>
+
+<!-- STATUSBAR -->
+<div class="statusbar">
+  <a class="status-item" href="https://www.methode-igbas.fr" target="_blank">
+    <div class="status-dot dot-green"></div><span class="status-label">SITE </span><span class="status-val">EN LIGNE</span>
+  </a>
+  <a class="status-item" href="https://quiz-igbas.pages.dev" target="_blank">
+    <div class="status-dot dot-green"></div><span class="status-label">QUIZ </span><span class="status-val">EN LIGNE</span>
+  </a>
+  <a class="status-item" href="https://igbas-clients.pages.dev" target="_blank">
+    <div class="status-dot dot-green"></div><span class="status-label">APP CLIENTS </span><span class="status-val">EN LIGNE</span>
+  </a>
+  <a class="status-item" href="https://app.brevo.com" target="_blank">
+    <div class="status-dot dot-gold"></div><span class="status-label">BREVO </span><span class="status-val">ACTIF</span>
+  </a>
+  <a class="status-item" href="https://dashboard.stripe.com" target="_blank">
+    <div class="status-dot dot-green"></div><span class="status-label">STRIPE </span><span class="status-val">PRODUCTION</span>
+  </a>
+</div>
+
+<div style="text-align:center;font-size:12px;color:#5a6370;padding:6px;">dashboard-igbas — v1 — 05/09/2026 — Validé par Bernard : EN ATTENTE</div>
+
+<div class="main">
+
+  <!-- LIENS RAPIDES -->
+  <div class="section-title">Liens & Outils</div>
+  <div class="grid" id="dashboard"></div>
+
+</div>
+
+<!-- MODAL AJOUT LIEN -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Ajouter un lien</h3>
+    <div class="modal-field">
+      <label class="modal-label">Catégorie</label>
+      <select class="modal-select" id="modalCat"></select>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Nom</label>
+      <input class="modal-input" id="modalName" placeholder="Ex : Page boutique">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">URL</label>
+      <input class="modal-input" id="modalUrl" placeholder="https://…">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-save" onclick="saveLink()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'igbas_dashboard_v3';
+
+const DEFAULT_DATA = {
+  categories: [
+    {
+      id:'perso', icon:'💰', label:'Perso & Famille', color:'#c8973a',
+      links:[
+        {name:'Comptabilité ML & Bernard', url:'https://compta-igbas.pages.dev'},
+      ]
+    },
+    {
+      id:'cloudflare', icon:'⚡', label:'Cloudflare Pages', color:'#c8973a',
+      links:[
+        {name:'App Publique (Compagnon Santé)', url:'https://compagnon-sante.pages.dev'},
+        {name:'App Clients', url:'https://igbas-clients.pages.dev'},
+        {name:'Quiz Profil', url:'https://quiz-igbas.pages.dev'},
+        {name:'Dashboard Cloudflare', url:'https://dash.cloudflare.com'},
+      ]
+    },
+    {
+      id:'site', icon:'🌐', label:'Site WebAcappella', color:'#1e6b5e',
+      links:[
+        {name:'Accueil / Une', url:'https://www.methode-igbas.fr/sante-surpoids-diabete-maigrir-pertedepoids-methode-igbas.html'},
+        {name:'Méthode', url:'https://www.methode-igbas.fr/sante-alimentation-diabete-cholesterol-surpoids-methode-igbas.html'},
+        {name:'Boutique / Shop', url:'https://www.methode-igbas.fr/boutique_cadeau_offrir_maigrir_manger_methode_igbas.php'},
+        {name:'Recettes', url:'https://www.methode-igbas.fr/repas_menus_recettes_igbas_gp_pl_sans_sucre_transformer_farine_igbas.html'},
+        {name:'Témoignages', url:'https://www.methode-igbas.fr/ce033795_f2d7_4919_8b4c_2e8b5fd7d82a.html'},
+        {name:'FAQ', url:'https://www.methode-igbas.fr/faq_questions_frequentes_methode-igbas.html'},
+        {name:'Contact', url:'https://www.methode-igbas.fr/contact-methode-3-plus-1-igbas.html'},
+      ]
+    },
+    {
+      id:'brevo', icon:'📧', label:'Brevo', color:'#4ecb8d',
+      links:[
+        {name:'Dashboard Brevo', url:'https://app.brevo.com'},
+        {name:'Contacts', url:'https://app.brevo.com/contact/list'},
+        {name:'Campagnes Email', url:'https://app.brevo.com/campaign/list'},
+        {name:'Formulaire Recettes', url:'https://a11ae83e.sibforms.com/serve/MUIFABDT4SZAKG0le7CndFuifLQi8b26k00rnwT9fyF07oAFqXYaP6pw0ALOfzY8t84ZDVcrR4mB12Fzn4a88G1CO4GuAn6OGUR9VJ0gMIpaK0lDzlaqlVoTrzyYpQoQOAo4jEquDh0uK5fHXeFSuXAGs3TUvNcmiHdspRGWir9JcdZx1IBsqa2CJ-tt40sEERzH1yDwt-oMCCYmOg=='},
+      ]
+    },
+    {
+      id:'hebergement', icon:'🖥️', label:'Hébergement & Paiement', color:'#4A7A9B',
+      links:[
+        {name:'PlanetHoster', url:'https://www.planethoster.com/fr/Connexion'},
+        {name:'WebAcappella', url:'https://www.webacappella.com'},
+        {name:'Stripe Dashboard', url:'https://dashboard.stripe.com'},
+        {name:'Klarna Portal', url:'https://portal.klarna.com'},
+      ]
+    },
+    {
+      id:'social', icon:'📱', label:'Réseaux & Comms', color:'#9b4ecb',
+      links:[
+        {name:'Instagram IGBas', url:'https://www.instagram.com/igbas_marielaure_lesecret'},
+        {name:'Facebook IGBas', url:'https://www.facebook.com/latablemarielauresantebio/'},
+      ]
+    },
+    {
+      id:'couleurs', icon:'🎨', label:'Charte Couleurs IGBas', color:'#1A3A5C',
+      type:'colors',
+      colors:[
+        {hex:'#085041', name:'Vert foncé'},
+        {hex:'#1D9E75', name:'Teal'},
+        {hex:'#E1F5EE', name:'Vert clair'},
+        {hex:'#1A3A5C', name:'Navy'},
+        {hex:'#c8973a', name:'Or'},
+        {hex:'#e0a83c', name:'Or clair'},
+        {hex:'#4ecb8d', name:'Vert vif'},
+        {hex:'#1e6b5e', name:'Teal foncé'},
+        {hex:'#EAF4F0', name:'Fond vert'},
+        {hex:'#0a1628', name:'Navy profond'},
+      ]
+    },
+    {
+      id:'codes', icon:'💻', label:'Codes CSS utiles', color:'#e05252',
+      type:'codes',
+      codes:[
+        {label:'Police Outfit', value:"font-family:'Outfit',sans-serif;"},
+        {label:'Vert foncé', value:'#085041'},
+        {label:'Teal', value:'#1D9E75'},
+        {label:'Or', value:'#BA7517'},
+        {label:'Bouton Teal', value:'border-radius:50px;background:#1D9E75;color:#fff;'},
+        {label:'Bouton Vert', value:'border-radius:50px;background:#085041;color:#fff;'},
+        {label:'Corps 50+', value:'font-size:20px;line-height:1.7;font-weight:400;'},
+        {label:'GTM ID', value:'GTM-PC74MK2Z'},
+        {label:'GA4 ID', value:'G-FCB60F02Q9'},
+      ]
+    }
+  ]
+};
+
+let data = loadData();
+
+function loadData(){
+  try{
+    const s = localStorage.getItem(STORAGE_KEY);
+    return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }catch(e){return JSON.parse(JSON.stringify(DEFAULT_DATA));}
+}
+function saveData(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(e){}
+}
+
+// WIDGET DERNIÈRE OPÉ
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function openLink(url){window.open(url,'_blank');}
+
+function copyText(text){
+  navigator.clipboard.writeText(text).then(()=>toast('✓ Copié !'));
+}
+
+function deleteLink(catId, idx){
+  const cat = data.categories.find(c=>c.id===catId);
+  if(cat&&cat.links){cat.links.splice(idx,1);saveData();render();toast('Lien supprimé');}
+}
+
+function openModal(){
+  const sel = document.getElementById('modalCat');
+  sel.innerHTML = data.categories.filter(c=>!c.type).map(c=>`<option value="${c.id}">${c.label}</option>`).join('');
+  document.getElementById('modalName').value='';
+  document.getElementById('modalUrl').value='';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+
+function saveLink(){
+  const catId = document.getElementById('modalCat').value;
+  const name = document.getElementById('modalName').value.trim();
+  const url = document.getElementById('modalUrl').value.trim();
+  if(!name||!url) return;
+  const cat = data.categories.find(c=>c.id===catId);
+  if(cat){cat.links.push({name,url});saveData();closeModal();render();toast('✓ Lien ajouté !');}
+}
+
+function exportData(){
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'igbas-dashboard-backup.json';
+  a.click();
+  toast('✓ Export téléchargé');
+}
+
+function render(){
+  const grid = document.getElementById('dashboard');
+  grid.innerHTML = data.categories.map(cat=>{
+    let body = '';
+    if(cat.type==='colors'){
+      body = `<div class="swatches">${cat.colors.map(c=>`
+        <div class="swatch" onclick="copyText('${c.hex}')" title="${c.name} — ${c.hex}">
+          <div class="swatch-color" style="background:${c.hex}"></div>
+          <div class="swatch-hex">${c.hex}</div>
+        </div>`).join('')}</div>`;
+    } else if(cat.type==='codes'){
+      body = cat.codes.map(c=>`
+        <div class="code-bloc">
+          <div class="code-header">
+            <span class="code-label">${c.label}</span>
+            <button class="btn-copy-code" onclick="copyText('${c.value.replace(/'/g,"\\'")}')">Copier</button>
+          </div>
+          <div class="code-content">${c.value}</div>
+        </div>`).join('');
+    } else {
+      const links = (cat.links||[]).map((l,i)=>`
+        <a class="link-item" href="${l.url}" target="_blank">
+          <div class="link-dot"></div>
+          <span class="link-name">${l.name}</span>
+          <span class="link-del" onclick="event.preventDefault();event.stopPropagation();deleteLink('${cat.id}',${i})">✕</span>
+        </a>`).join('');
+      const addzone = `<div class="add-zone">
+        <div class="add-row">
+          <input class="add-input" id="n-${cat.id}" placeholder="Nom du lien">
+          <input class="add-input" id="u-${cat.id}" placeholder="https://…">
+          <button class="btn-add-link" onclick="quickAdd('${cat.id}')">+</button>
+        </div></div>`;
+      body = `<div style="padding:4px 0">${links}</div>${addzone}`;
+    }
+
+    return `<div class="cat-card">
+      <div class="cat-head">
+        <div class="cat-icon" style="background:${cat.color}22">${cat.icon}</div>
+        <div class="cat-label">${cat.label}</div>
+        ${cat.links?`<div class="cat-count">${cat.links.length}</div>`:''}
+      </div>
+      <div class="cat-body">${body}</div>
+    </div>`;
+  }).join('');
+}
+
+function quickAdd(catId){
+  const name = document.getElementById('n-'+catId)?.value.trim();
+  const url = document.getElementById('u-'+catId)?.value.trim();
+  if(!name||!url) return;
+  const cat = data.categories.find(c=>c.id===catId);
+  if(cat){cat.links.push({name,url});saveData();render();toast('✓ Lien ajouté !');}
+}
+
+// Horloge
+function tick(){
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('fr-FR');
+}
+setInterval(tick,1000); tick();
+
+// Init
+render();
+</script>
