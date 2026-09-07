@@ -1,13 +1,17 @@
 <!--
-  VERSION : v1 - 05/09/2026
+  VERSION : v2 - 06/09/2026
   Cumule :
     - v1 : reprise du contenu existant, migration vers dépôt GitHub. Retrait de
       la catégorie "App Campagne" et du widget "Dernière Opération Campagne"
       (appli campagne-igbas supprimée le 05/09/2026). Correction du lien "App
       Publique" (ancien methode-igbas.pages.dev -> compagnon-sante.pages.dev).
-  Fichiers precedents : index.html (dashboard-igbas, version initiale)
+    - v2 : ajout des catégories manquantes "Recettes & Alimentation" (recettes-igbas,
+      gestion aliments/IG), "RDV & Documents" (RDV coaching, RDV site, docs coaching)
+      et "Équipe" (dashboard Marie-Laure, Notre Histoire). Mise à jour du lien Quiz
+      Profil vers sa nouvelle adresse GitHub (quiz-igbas-1il.pages.dev).
+  Fichiers precedents : index.html (dashboard-igbas, version initiale), v1 (05/09/2026)
 -->
-<meta name="app-version" content="v1-2026-09-05">
+<meta name="app-version" content="v2-2026-09-06">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IGBas® — Dashboard Central</title>
@@ -161,7 +165,7 @@ body{background:var(--navy);color:var(--text);font-family:'Outfit',sans-serif;mi
   <a class="status-item" href="https://www.methode-igbas.fr" target="_blank">
     <div class="status-dot dot-green"></div><span class="status-label">SITE </span><span class="status-val">EN LIGNE</span>
   </a>
-  <a class="status-item" href="https://quiz-igbas.pages.dev" target="_blank">
+  <a class="status-item" href="https://quiz-igbas-1il.pages.dev" target="_blank">
     <div class="status-dot dot-green"></div><span class="status-label">QUIZ </span><span class="status-val">EN LIGNE</span>
   </a>
   <a class="status-item" href="https://igbas-clients.pages.dev" target="_blank">
@@ -175,7 +179,7 @@ body{background:var(--navy);color:var(--text);font-family:'Outfit',sans-serif;mi
   </a>
 </div>
 
-<div style="text-align:center;font-size:12px;color:#5a6370;padding:6px;">dashboard-igbas — v1 — 05/09/2026 — Validé par Bernard : EN ATTENTE</div>
+<div style="text-align:center;font-size:12px;color:#5a6370;padding:6px;">dashboard-igbas — v2 — 06/09/2026 — Validé par Bernard : EN ATTENTE</div>
 
 <div class="main">
 
@@ -216,6 +220,28 @@ const STORAGE_KEY = 'igbas_dashboard_v3';
 const DEFAULT_DATA = {
   categories: [
     {
+      id:'recettes', icon:'🍽️', label:'Recettes & Alimentation', color:'#1D9E75',
+      links:[
+        {name:'Recettes-IGBas (catalogue + saisie)', url:'https://recettes-igbas.pages.dev'},
+        {name:'Gestion Aliments / IG', url:'https://recettes-igbas.pages.dev/gestion-aliments-ig'},
+      ]
+    },
+    {
+      id:'rdv-docs', icon:'📅', label:'RDV & Documents', color:'#4A7A9B',
+      links:[
+        {name:'RDV Coaching (interne)', url:'https://igbas-rdv.pages.dev'},
+        {name:'RDV Site (public)', url:'https://rdv-igbas.pages.dev'},
+        {name:'Docs Coaching', url:'https://docs-igbas.pages.dev'},
+      ]
+    },
+    {
+      id:'equipe', icon:'👥', label:'Équipe', color:'#9b4ecb',
+      links:[
+        {name:'Dashboard Marie-Laure', url:'https://ml-igbas-7k1.pages.dev'},
+        {name:'Notre Histoire', url:'https://notre-histoire-igbas-ds7.pages.dev'},
+      ]
+    },
+    {
       id:'perso', icon:'💰', label:'Perso & Famille', color:'#c8973a',
       links:[
         {name:'Comptabilité ML & Bernard', url:'https://compta-igbas.pages.dev'},
@@ -226,7 +252,7 @@ const DEFAULT_DATA = {
       links:[
         {name:'App Publique (Compagnon Santé)', url:'https://compagnon-sante.pages.dev'},
         {name:'App Clients', url:'https://igbas-clients.pages.dev'},
-        {name:'Quiz Profil', url:'https://quiz-igbas.pages.dev'},
+        {name:'Quiz Profil', url:'https://quiz-igbas-1il.pages.dev'},
         {name:'Dashboard Cloudflare', url:'https://dash.cloudflare.com'},
       ]
     },
