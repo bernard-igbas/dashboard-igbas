@@ -1,6 +1,8 @@
 <!--
-  VERSION : v2 - 06/09/2026
+  VERSION : v3 - 30/09/2026 - Validé par Bernard : EN ATTENTE
   Cumule :
+    - v3 (30/09/2026) : les deux liens "App Clients" pointent vers app.methode-igbas.fr
+      (espace client intégré au Compagnon) au lieu de l'ancienne appli des clients.
     - v1 : reprise du contenu existant, migration vers dépôt GitHub. Retrait de
       la catégorie "App Campagne" et du widget "Dernière Opération Campagne"
       (appli campagne-igbas supprimée le 05/09/2026). Correction du lien "App
@@ -11,7 +13,7 @@
       Profil vers sa nouvelle adresse GitHub (quiz-igbas-1il.pages.dev).
   Fichiers precedents : index.html (dashboard-igbas, version initiale), v1 (05/09/2026)
 -->
-<meta name="app-version" content="v2-2026-09-06">
+<meta name="app-version" content="v3-2026-09-30">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IGBas® — Dashboard Central</title>
@@ -168,7 +170,7 @@ body{background:var(--navy);color:var(--text);font-family:'Outfit',sans-serif;mi
   <a class="status-item" href="https://quiz-igbas-1il.pages.dev" target="_blank">
     <div class="status-dot dot-green"></div><span class="status-label">QUIZ </span><span class="status-val">EN LIGNE</span>
   </a>
-  <a class="status-item" href="https://igbas-clients.pages.dev" target="_blank">
+  <a class="status-item" href="https://app.methode-igbas.fr" target="_blank">
     <div class="status-dot dot-green"></div><span class="status-label">APP CLIENTS </span><span class="status-val">EN LIGNE</span>
   </a>
   <a class="status-item" href="https://app.brevo.com" target="_blank">
@@ -251,7 +253,7 @@ const DEFAULT_DATA = {
       id:'cloudflare', icon:'⚡', label:'Cloudflare Pages', color:'#c8973a',
       links:[
         {name:'App Publique (Compagnon Santé)', url:'https://compagnon-sante.pages.dev'},
-        {name:'App Clients', url:'https://igbas-clients.pages.dev'},
+        {name:'App Clients (Espace client du Compagnon)', url:'https://app.methode-igbas.fr'},
         {name:'Quiz Profil', url:'https://quiz-igbas-1il.pages.dev'},
         {name:'Dashboard Cloudflare', url:'https://dash.cloudflare.com'},
       ]
